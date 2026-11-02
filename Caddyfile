@@ -1,0 +1,8 @@
+{$ACADEMY_DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 9MB
+    }
+    header Strict-Transport-Security "max-age=31536000"
+    reverse_proxy academy:8000
+}

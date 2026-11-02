@@ -1,0 +1,37 @@
+services:
+  academy:
+    build: .
+    restart: unless-stopped
+    environment:
+      ACADEMY_DATA_DIR: /data
+      ACADEMY_SECURE_COOKIES: '1'
+      ACADEMY_TRUST_PROXY: '1'
+      ACADEMY_STORAGE_LIMIT: '21474836480'
+    volumes:
+      - academy_data:/data
+    expose:
+      - '8000'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      ACADEMY_DOMAIN: ${ACADEMY_DOMAIN:?Define ACADEMY_DOMAIN con tu dominio}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      academy:
+        condition: service_healthy
+volumes:
+  academy_data:
+  caddy_data:
+  caddy_config:

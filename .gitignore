@@ -1,0 +1,14 @@
+.runtime/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+test-results/
+node_modules/
+.vercel/
+dist/
+*.log
+
+# Reproducible large assets: python3 scripts/prepare-assets.py
+public/vendor/wasm/*.wasm
